@@ -95,7 +95,7 @@ if st.button("🚀 GENERAR MI PLAN DE BIOLOGÍSTICA", disabled=not acepto):
             
             # PROMPT CON TUS INSTRUCCIONES EXACTAS
             prompt = f"""
-            Eres una experta en BioLogística Nutricionaly Gestion de Alimentos. 
+            Eres una experta en BioLogística nutricional y Gestion de Alimentos. 
             CLIENTE: {nombre}. EDAD: {edad}. PESO: {peso}kg. IMC: {imc}.
             RITMO: {actividad}. META: {meta}. CUIDADO ESPECIAL: {salud}
             PROTEÍNA OBJETIVO: {proteina_diaria}g al día.
@@ -103,9 +103,9 @@ if st.button("🚀 GENERAR MI PLAN DE BIOLOGÍSTICA", disabled=not acepto):
 
             INSTRUCCIONES DE ORGANIZACIÓN:
             1. Confirma que necesita {proteina_diaria}g de proteína al día por su actividad ({actividad}).
-            2. **ESTRATEGIA 100% INVENTARIO**: Diseña el menú de Lunes a Viernes usando lo que hay en el inventario. Combina los alimentos de forma eficiente para cubrir la proteína meta.
+            2. **ESTRATEGIA USAR INVENTARIO**: Diseña el menú de Lunes a Viernes usando lo que hay en el inventario. Combina los alimentos de forma eficiente para cubrir la proteína meta.
                - En cada comida, detalla: [Ingrediente en cantidad] ([Gramos de Proteína])(ej: 150g Pollo = 31g proteína)
-               - AL FINAL de cada dia, pon en negrita: **Total Proteína: [Suma Total]g**.
+               - PONER AL FINAL de cada dia, pon en negrita: **Total Proteína: [Suma Total]g**.
             4. **LOGÍSTICA DE PREPARACIÓN**: Explica brevemente cómo cocinarlo para que sea agradable con los ingredientes que hay.
             5. **PROYECCIÓN SEMANA SIGUIENTE**: 
                - Analiza qué se agotó del inventario de esta semana.
