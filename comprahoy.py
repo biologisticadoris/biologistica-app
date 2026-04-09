@@ -1,5 +1,5 @@
 import streamlit as st
-import google.generativeai as genai
+import google import genai
 from fpdf import FPDF
 
 # 1. CONFIGURACIÓN DE PÁGINA
