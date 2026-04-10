@@ -18,7 +18,7 @@ def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo):
     pdf.cell(0, 10, f"PLAN MAESTRO DE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
     pdf.ln(5)
     
-    # Ficha del Paciente
+    # Ficha del Cliente
     pdf.set_font("Arial", 'B', 10)
     pdf.set_text_color(0, 0, 0)
     pdf.set_fill_color(230, 240, 230)
@@ -37,15 +37,17 @@ def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo):
 # --- INTERFAZ PRINCIPAL ---
 st.markdown("<h1 style='text-align: center; color: #2E7D32;'>🥗 BIOLOGÍSTICA DE PRECISIÓN</h1>", unsafe_allow_html=True)
 
-# --- BLOQUE DE SEGURIDAD (OBLIGATORIO) ---
+# --- BLOQUE DE SEGURIDAD (CORREGIDO) ---
 st.subheader("⚖️ Acuerdo de Responsabilidad y Privacidad")
 with st.container(border=True):
-     **Al usar BioLogística, confirmas que comprendes:**
+    st.write("""
+    **Al usar BioLogística, confirmas que comprendes:**
     1. Esta es una herramienta de **organización de inventario**.
     2. Los datos de peso/salud se usan para cálculos matemáticos y **no se almacenan**.
     3. No sustituye el diagnóstico de un médico. Consulta a un profesional antes de cambiar tu dieta.
     """)
-    acepto = st.checkbox("He leído y acepto que esto es una guía logística y no una prescripción médica.")
+    # Guardamos la respuesta en 'acepto_seguridad'
+    acepto_seguridad = st.checkbox("He leído y acepto que esto es una guía logística y no una prescripción médica.")
 
 with st.sidebar:
     st.header("👤 Perfil del cliente")
@@ -81,22 +83,33 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto_segu
             client = Groq(api_key=API_KEY_MAESTRA)
             
             prompt = f"""
-            Actúa como Nutricionista  y Experta en Logística de Suministros.
+            Actúa como Nutricionista y Experta en Logística de Suministros.
             CLIENTE: {nombre}, {edad} años, con {salud}.
             META: {proteina_diaria}g proteína diaria para {objetivo}.
             INVENTARIO ACTUAL: {inventario}.
 
-            TAREAS ESTRICTAS:
-            1. TABLA DE MENÚ (Lunes a Viernes): 
-               - Crea un menú saludable. Si un ingrediente necesario NO está en el inventario, deja el espacio vacío y pon "(Falta compra)".
-               
-            2. LISTA DE COMPRAS PROFESIONAL (PARA 7 DÍAS):
-               - Calcula las cantidades totales de los alimentos necesarias de acuerdo a los requerimientos del cliente, restando el inventario.
-               - Formato de Supermercado: Kilos (kg) para carnes/verduras, Litros (L) para lácteos/aceites.
-               - Ejemplo: "Comprar 1.2 kg de Pechuga de Pollo", "2 kg de Manzanas", "1 L de Aceite de Oliva".
             
-            3. FORMATO: Texto claro y profesional. No uses barritas '|' que dañen el PDF.
-            """
+INSTRUCCIONES:
+1. Confirma la proteína necesaria explicando brevemente por qué.
+2. Diseña menú Semanal usando el inventario disponible.
+   - En cada comida indica el alimento, cantidad y proteína entre paréntesis.
+   - Ejemplo: 150g Pechuga de pollo (31g proteína)
+   - Al final de cada día suma EXACTAMENTE los gramos de proteína de cada comida.
+   - REGLA IMPORTANTE: El Total Proteína diario = suma exacta de desayuno + almuerzo + cena. No inventes el total, calcula matemáticamente.
+3. Explica brevemente cómo preparar los alimentos de forma saludable.
+4. Hacer la lista de compras para la semana siguiente basada en lo que necesita el cliente, descontar el inventario usado, poner cantidades en unidades, gramos o litros reales que va a necesitar el cliente. Sé proporcional y lógica.
+5.LISTA DE COMPRAS PROFESIONAL (PARA 7 DÍAS):
+   - Calcula las cantidades totales de los alimentos necesarias, restando el inventario.
+   - Formato de Supermercado: Kilos (kg) para carnes/verduras, Litros (L) para lácteos/aceites.
+6. FORMATO: Texto claro y profesional. No uses barritas '|' que dañen el PDF.
+
+REGLAS:
+- Solo comida natural, nada de polvos ni suplementos.
+- Sugiere alimentos específicos que ayuden con: {salud}.
+- Lista de compras en cantidades.
+- Sé amable y clara, sin lenguaje médico.TAREAS ESTRICTAS:
+- Crea un menú saludable. Si un ingrediente necesario NO está en el inventario, deja el espacio vacío y pon "(Falta compra)".
+ """
 
             with st.spinner("⚖️ Aplicando criterios médicos y calculando kilos de compra..."):
                 response = client.chat.completions.create(
