@@ -4,55 +4,34 @@ from fpdf import FPDF
 
 st.set_page_config(page_title="BioLogística Pro", page_icon="🥗", layout="wide")
 
+# Llave API desde Secrets
 API_KEY_MAESTRA = st.secrets["GROQ_API_KEY"] if "GROQ_API_KEY" in st.secrets else "TU_LLAVE_AQUI"
 
-def generar_pdf(texto, nombre, proteina, p_ideal, imc, actividad, edad):
+def generar_pdf(texto, nombre, proteina, p_ideal, imc, edad):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_margins(15, 15, 15)
-
-    # Titulo Estilizado
+    
+    # Encabezado corregido (set_text_color)
     pdf.set_font("Arial", 'B', 16)
-    pdf.set_text_color(34, 139, 34) # Verde Bosque
-    pdf.cell(0, 15, f"PLAN MAESTRO DE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
-    pdf.ln(5)
-
-    # Datos del Cliente
+    pdf.set_text_color(46, 125, 50)
+    pdf.cell(0, 10, f"REPORTE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
+    pdf.ln(3)
+    
+    # Datos de Salud
     pdf.set_font("Arial", 'B', 10)
-    pdf.set_fill_color(240, 240, 240)
-    pdf.set_tex_color(0, 0, 0)
-    pdf.cell(45, 10, "Referencia Peso", 1, 0, 'C', True)
-    pdf.cell(45, 10, "IMC Actual", 1, 0, 'C', True)
-
-    pdf.set_font("Arial", '', 11)
-    pdf.cell(45, 10, f"{p_ideal} kg", 1, 0, 'C')
-    pdf.cell(45, 10, f"{imc}", 1, 0, 'C')
-    pdf.cell(90, 10, f"{proteina} g / día", 1, 1, 'C')
-    pdf.ln(10)
-
-    # El Plan (AQUI ESTA EL CAMBIO IMPORTANTE)
-    pdf.set_font("Arial", 'B', 12)
-    pdf.set_fill_color(34, 139, 34)
-    pdf.set_text_color(255, 255, 255)
-    pdf.cell(0, 10, "DETALLE DEL PLAN PARA 5 DÍAS", 0, 1, 'L', True)
-
-    pdf.set_font("Arial", '', 10)
-    pdf.multi_cell(0, 7, texto)
-    pdf.multi_cell(0, 5, "AVISO: Guia logistica de alimentos. No es prescripcion medica.")
-    pdf.ln(2)
-    pdf.set_font("Arial", size=9)
     pdf.set_text_color(0, 0, 0)
-    limpio = texto
-    for c in ['🚀','🥗','✅','⚖️','📦','📊','**','###','##','#','|','-']:
-        limpio = limpio.replace(c, '')
-    limpio = limpio.encode('latin-1', 'ignore').decode('latin-1')
-    for linea in limpio.split('\n'):
-        linea = linea.strip()
-        if linea:
-            pdf.multi_cell(0, 6, txt=linea)
-            pdf.ln(1)
+    pdf.cell(0, 7, f"Edad: {edad} anos | Peso ref: {p_ideal}kg | IMC: {imc} | Proteina: {proteina}g/dia", ln=True)
+    pdf.ln(5)
+    
+    # Contenido con multi_cell para que NO SE CORTE
+    pdf.set_font("Arial", size=10)
+    limpio = texto.encode('latin-1', 'ignore').decode('latin-1')
+    pdf.multi_cell(0, 6, txt=limpio, border=1)
+    
     return pdf.output(dest='S').encode('latin-1')
 
+# --- INTERFAZ ---
 st.markdown("<h1 style='text-align: center; color: #2E7D32;'>🥗 BIOLOGÍSTICA DE PRECISIÓN</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Gestión Inteligente de Inventario y Optimización de Alimentos</p>", unsafe_allow_html=True)
 
@@ -67,27 +46,24 @@ with st.container(border=True):
     acepto = st.checkbox("He leído y acepto que esto es una guía logística y no una prescripción médica.")
 
 with st.sidebar:
-    st.markdown('<div style="font-size: 80px; text-align: center;">🥗</div>', unsafe_allow_html=True)
     st.header("👤 Datos del Cliente")
     nombre = st.text_input("Nombre:")
     col_a, col_b = st.columns(2)
     with col_a:
-        edad = st.number_input("Edad:", 1, 120, 40)
+        edad = st.number_input("Edad:", 1, 120, 57)
         peso = st.number_input("Peso (kg):", 30.0, 200.0, 65.0)
     with col_b:
-        talla_cm = st.number_input("Altura (cm):", 100.0, 250.0, 160.0)
+        talla_cm = st.number_input("Altura (cm):", 100.0, 250.0, 155.0)
         genero = st.radio("Género:", ["Femenino", "Masculino"])
-    actividad = st.select_slider("Ritmo de vida:", options=["Sedentario", "Ligero", "Moderado", "Intenso", "Atleta"], value="Moderado")
-    meta = st.radio("Objetivo:", ["Mantener", "Ganar Músculo", "Perder Grasa"])
-    salud = st.multiselect("Cuidado especial en:", ["Diabetes", "Colesterol", "Hígado Graso", "Presión Alta"], default=["Hígado Graso"])
+    
+    actividad = st.select_slider("Ritmo de vida:", options=["Sedentario", "Ligero", "Moderado", "Intenso"], value="Sedentario")
+    salud = st.multiselect("Cuidado especial:", ["Diabetes", "Colesterol", "Hígado Graso", "Presión Alta"], default=["Hígado Graso", "Colesterol"])
 
+# Cálculos rápidos
 talla_m = talla_cm / 100
 imc = round(peso / (talla_m**2), 1)
 peso_ideal = round((talla_cm - 100) - ((talla_cm - 150) / (2.5 if genero == "Femenino" else 4)), 1)
-factores = {"Sedentario": 1.2, "Ligero": 1.4, "Moderado": 1.6, "Intenso": 1.9, "Atleta": 2.2}
-f_act = factores[actividad]
-if meta == "Ganar Músculo": f_act += 0.2
-proteina_diaria = round(peso * f_act, 1)
+proteina_diaria = round(peso * 1.2, 1)
 
 st.subheader("📊 Resumen de Datos")
 c1, c2, c3 = st.columns(3)
@@ -97,52 +73,38 @@ c3.metric("Proteína Objetivo", f"{proteina_diaria} g")
 
 st.write("---")
 st.subheader("📦 Inventario Real disponible")
-inventario = st.text_area("Lista de alimentos que tienes en casa...", placeholder="Ej: 1kg pechuga, 12 huevos, 500g arroz...", height=120)
+inventario = st.text_area("Escribe lo que TIENES hoy en casa:", placeholder="Ej: 12 huevos, 2 latas de atún...", height=120)
 
 if st.button("🚀 GENERAR MI PLAN DE BIOLOGÍSTICA", disabled=not acepto):
     if not nombre or not inventario:
-        st.error("❌ Por favor completa los campos requeridos.")
+        st.error("❌ Por favor completa tu nombre e inventario.")
     else:
         try:
             client = Groq(api_key=API_KEY_MAESTRA)
-
+            
             prompt = f"""
-actua como una experta en BioLogística nutricional y Gestión de Alimentos,Genera un plan basado UNICAMNETE con el inventario proporcionado
-CLIENTE: {nombre}. EDAD: {edad}. PESO: {peso}kg. IMC: {imc}.
-RITMO: {actividad}. META: {meta}. CUIDADO ESPECIAL: {salud}
-PROTEÍNA OBJETIVO: {proteina_diaria}g al día.
-INVENTARIO DISPONIBLE: {inventario}.
+            Eres una experta en BioLogística. Tu misión es organizar el consumo de alimentos de {nombre}.
+            INVENTARIO DISPONIBLE: {inventario}
+            REQUERIMIENTO: Plan de 5 días con {proteina_diaria}g proteína/día.
 
-INSTRUCCIONES:
-1. Confirma la proteína necesaria explicando brevemente por qué.
-2. Diseña menú de Lunes a Viernes usando el inventario disponible.
-   - En cada comida indica el alimento, cantidad y proteína entre paréntesis.
-   - Ejemplo: 150g Pechuga de pollo (31g proteína)
-   - Al final de cada día suma EXACTAMENTE los gramos de proteína de cada comida.
-   - REGLA IMPORTANTE: El Total Proteína diario = suma exacta de desayuno + almuerzo + cena. No inventes el total, calcula matemáticamente.
-3. Explica brevemente cómo preparar los alimentos de forma saludable.
-4. Hacer la lista de compras para la semana siguiente basada en lo que necesita el cliente y descontar lo que ya se uso del inventario, poner  cantidades en unidades,gramos o litros reales que va a necesitar el cliente. Sé proporcional y lógica.
+            INSTRUCCIONES OBLIGATORIAS:
+            1. REGLA DE RESTA: Antes de sugerir comprar algo, mira el INVENTARIO. Si el cliente tiene suficiente de un ingrediente, la LISTA DE COMPRAS debe decir: "Ya tienes suficiente". Solo pide comprar la diferencia faltante.
+            2. PORCIONES LOGICAS: No excedas cantidades absurdas (Max 40g queso por comida).
+            3. NO INVENTES: Si no hay pollo en el inventario, NO pongas pollo en el menú.
+            4. FORMATO: Menú diario y LISTA DE COMPRAS REAL (restando inventario).
+            """
 
-REGLAS:
-- Solo comida natural, nada de polvos ni suplementos.
-- Sugiere alimentos específicos que ayuden con: {salud}.
-- Lista de compras en cantidades.
-- Sé amable y clara, sin lenguaje médico.
-"""
-
-            with st.spinner("⚖️ Calculando logística de precisión..."):
+            with st.spinner("⚖️ Calculando logística y descontando inventario..."):
                 response = client.chat.completions.create(
                     model="llama-3.3-70b-versatile",
                     messages=[{"role": "user", "content": prompt}],
-                    temperature=0.7,
-                    max_tokens=2000
+                    temperature=0.4
                 )
                 plan = response.choices[0].message.content
-
-            st.markdown(plan)
-
-            pdf_bytes = generar_pdf(plan, nombre, proteina_diaria, peso_ideal, imc, actividad, edad)
-            st.download_button("📥 DESCARGAR REPORTE (PDF)", data=pdf_bytes, file_name=f"BioLogistica_{nombre}.pdf", mime="application/pdf")
+                st.markdown(plan)
+                
+                pdf_bytes = generar_pdf(plan, nombre, proteina_diaria, peso_ideal, imc, edad)
+                st.download_button("📥 DESCARGAR REPORTE PDF", data=pdf_bytes, file_name=f"BioLogistica_{nombre}.pdf", mime="application/pdf")
 
         except Exception as e:
             st.error(f"Error en el sistema: {e}")
