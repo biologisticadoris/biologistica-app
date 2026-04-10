@@ -7,7 +7,7 @@ st.set_page_config(page_title="BioLogística Pro", page_icon="🥗", layout="wid
 # Llave API
 API_KEY_MAESTRA = st.secrets["GROQ_API_KEY"] if "GROQ_API_KEY" in st.secrets else "TU_LLAVE_AQUI"
 
-def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo):
+def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo, actividad):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_margins(15, 15, 15)
@@ -18,17 +18,16 @@ def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo):
     pdf.cell(0, 10, f"PLAN MAESTRO DE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
     pdf.ln(5)
     
-    # Ficha del Cliente
+    # Ficha del Paciente
     pdf.set_font("Arial", 'B', 10)
     pdf.set_text_color(0, 0, 0)
     pdf.set_fill_color(230, 240, 230)
-    resumen = f"Edad: {edad} | IMC: {imc} | Peso Ref: {peso_ideal}kg | Meta: {proteina}g prot/dia"
+    resumen = f"Edad: {edad} | Actividad: {actividad} | IMC: {imc} | Meta: {proteina}g prot/dia"
     pdf.cell(0, 10, resumen.encode('latin-1', 'ignore').decode('latin-1'), ln=True, fill=True, border=1, align='C')
     pdf.ln(10)
     
     # Cuerpo del reporte
     pdf.set_font("Arial", size=10)
-    # Limpiamos caracteres que ensucian el PDF
     limpio = texto.replace('|', ' ').replace('*', '').encode('latin-1', 'ignore').decode('latin-1')
     pdf.multi_cell(0, 6, txt=limpio)
     
@@ -37,17 +36,16 @@ def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo):
 # --- INTERFAZ PRINCIPAL ---
 st.markdown("<h1 style='text-align: center; color: #2E7D32;'>🥗 BIOLOGÍSTICA DE PRECISIÓN</h1>", unsafe_allow_html=True)
 
-# --- BLOQUE DE SEGURIDAD (CORREGIDO) ---
-st.subheader("⚖️ Acuerdo de Responsabilidad y Privacidad")
+# --- BLOQUE DE SEGURIDAD ---
+st.subheader("⚖️ Acuerdo de Uso y Privacidad")
 with st.container(border=True):
-    st.write("""
+    st.info("""
     **Al usar BioLogística, confirmas que comprendes:**
     1. Esta es una herramienta de **organización de inventario**.
     2. Los datos de peso/salud se usan para cálculos matemáticos y **no se almacenan**.
     3. No sustituye el diagnóstico de un médico. Consulta a un profesional antes de cambiar tu dieta.
     """)
-    # Guardamos la respuesta en 'acepto_seguridad'
-    acepto_seguridad = st.checkbox("He leído y acepto que esto es una guía logística y no una prescripción médica.")
+    acepto = st.checkbox("He leído y acepto que esto es una guía logística y no una prescripción médica.")
 
 with st.sidebar:
     st.header("👤 Perfil del cliente")
@@ -60,58 +58,53 @@ with st.sidebar:
         talla_cm = st.number_input("Altura (cm):", 100.0, 250.0, 155.0)
         genero = st.radio("Género:", ["Femenino", "Masculino"])
     
+    # --- AQUÍ ESTÁ LO QUE FALTABA: ACTIVIDAD FÍSICA ---
+    actividad = st.select_slider(
+        "Ritmo de vida / Actividad:",
+        options=["Sedentario", "Ligero", "Moderado", "Intenso"],
+        value="Sedentario"
+    )
+    
     objetivo = st.radio("Objetivo:", ["Mantener", "Ganar Músculo", "Perder Grasa"])
     salud = st.multiselect("Condiciones médicas:", ["Hígado Graso", "Colesterol", "Diabetes", "Hipertensión"], default=["Hígado Graso", "Colesterol"])
 
-# Cálculos de Nutrición
+# Cálculos de Nutrición Ajustados
 talla_m = talla_cm / 100
 imc = round(peso / (talla_m**2), 1)
 peso_ideal = round((talla_cm - 100) - ((talla_cm - 150) / (2.5 if genero == "Femenino" else 4)), 1)
-factores = {"Mantener": 1.2, "Ganar Músculo": 1.7, "Perder Grasa": 1.5}
-proteina_diaria = round(peso * factores[objetivo], 1)
+
+# Factor de proteína ajustado por actividad y objetivo
+base_prot = {"Mantener": 1.2, "Ganar Músculo": 1.6, "Perder Grasa": 1.4}
+extra_actividad = {"Sedentario": 0.0, "Ligero": 0.1, "Moderado": 0.2, "Intenso": 0.3}
+factor_final = base_prot[objetivo] + extra_actividad[actividad]
+proteina_diaria = round(peso * factor_final, 1)
 
 st.write("---")
 st.subheader("📦 Inventario de Despensa")
-inventario = st.text_area("Escribe detalladamente qué tienes (Ej: 3 huevos, 100g de queso, nada de carne...)", height=100)
+inventario = st.text_area("Escribe detalladamente qué tienes (Ej: 3 huevos, 100g de queso...)", height=100)
 
-# BOTÓN CONECTADO AL CHECKBOX DE SEGURIDAD
 if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto_seguridad):
     if not inventario:
-        st.error("❌ Por favor, ingresa tu inventario para poder calcular las compras.")
+        st.error("❌ Por favor, ingresa tu inventario.")
     else:
         try:
             client = Groq(api_key=API_KEY_MAESTRA)
             
             prompt = f"""
-            Actúa como Nutricionista y Experta en Logística de Suministros.
-            CLIENTE: {nombre}, {edad} años, con {salud}.
+            Actúa como Nutricionista y Experta en Logística.
+            CLIENTE: {nombre}, {edad} años, {genero}.
+            NIVEL DE ACTIVIDAD: {actividad}.
+            CONDICIONES: {salud}.
             META: {proteina_diaria}g proteína diaria para {objetivo}.
             INVENTARIO ACTUAL: {inventario}.
 
-            
-INSTRUCCIONES:
-1. Confirma la proteína necesaria explicando brevemente por qué.
-2. Diseña menú Semanal usando el inventario disponible.
-   - En cada comida indica el alimento, cantidad y proteína entre paréntesis.
-   - Ejemplo: 150g Pechuga de pollo (31g proteína)
-   - Al final de cada día suma EXACTAMENTE los gramos de proteína de cada comida.
-   - REGLA IMPORTANTE: El Total Proteína diario = suma exacta de desayuno + almuerzo + cena. No inventes el total, calcula matemáticamente.
-3. Explica brevemente cómo preparar los alimentos de forma saludable.
-4. Hacer la lista de compras para la semana siguiente basada en lo que necesita el cliente, descontar el inventario usado, poner cantidades en unidades, gramos o litros reales que va a necesitar el cliente. Sé proporcional y lógica.
-5.LISTA DE COMPRAS PROFESIONAL (PARA 7 DÍAS):
-   - Calcula las cantidades totales de los alimentos necesarias, restando el inventario.
-   - Formato de Supermercado: Kilos (kg) para carnes/verduras, Litros (L) para lácteos/aceites.
-6. FORMATO: Texto claro y profesional. No uses barritas '|' que dañen el PDF.
+            TAREAS:
+            1. TABLA DE MENÚ (Lunes a Viernes): Basada en su actividad {actividad}. Si falta algo, pon "(Falta compra)".
+            2. LISTA DE COMPRAS (PARA 7 DÍAS): Calcula los Kilos (kg) o Litros (L) necesarios restando el inventario.
+            3. FORMATO: Sin barritas '|'. Texto limpio y profesional.
+            """
 
-REGLAS:
-- Solo comida natural, nada de polvos ni suplementos.
-- Sugiere alimentos específicos que ayuden con: {salud}.
-- Lista de compras en cantidades.
-- Sé amable y clara, sin lenguaje médico.TAREAS ESTRICTAS:
-- Crea un menú saludable. Si un ingrediente necesario NO está en el inventario, deja el espacio vacío y pon "(Falta compra)".
- """
-
-            with st.spinner("⚖️ Aplicando criterios médicos y calculando kilos de compra..."):
+            with st.spinner("⚖️ Calculando según actividad física y salud..."):
                 response = client.chat.completions.create(
                     model="llama-3.3-70b-versatile",
                     messages=[{"role": "user", "content": prompt}],
@@ -120,7 +113,7 @@ REGLAS:
                 plan = response.choices[0].message.content
                 st.markdown(plan)
                 
-                pdf_bytes = generar_pdf(plan, nombre, proteina_diaria, peso_ideal, imc, edad, objetivo)
-                st.download_button("📥 DESCARGAR REPORTE PDF PROFESIONAL", data=pdf_bytes, file_name=f"Plan_Nutricional_{nombre}.pdf")
+                pdf_bytes = generar_pdf(plan, nombre, proteina_diaria, peso_ideal, imc, edad, objetivo, actividad)
+                st.download_button("📥 DESCARGAR REPORTE PDF", data=pdf_bytes, file_name=f"Plan_{nombre}.pdf")
         except Exception as e:
             st.error(f"Error técnico: {e}")
