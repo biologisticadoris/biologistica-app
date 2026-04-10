@@ -83,7 +83,7 @@ st.write("---")
 st.subheader("📦 Inventario de Despensa")
 inventario = st.text_area("Escribe detalladamente qué tienes (Ej: 3 huevos, 100g de queso...)", height=100)
 
-if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto_seguridad):
+if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
     if not inventario:
         st.error("❌ Por favor, ingresa tu inventario.")
     else:
