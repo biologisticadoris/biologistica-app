@@ -10,18 +10,36 @@ def generar_pdf(texto, nombre, proteina, p_ideal, imc, actividad, edad):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_margins(15, 15, 15)
+
+    # Titulo Estilizado
     pdf.set_font("Arial", 'B', 16)
-    pdf.set_text_color(46, 125, 50)
-    pdf.cell(0, 10, f"REPORTE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
-    pdf.ln(3)
+    pdf.set_text_color(34, 139, 34) # Verde Bosque
+    pdf.cell(0, 15, f"PLAN MAESTRO DE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
+    pdf.ln(5)
+
+    # Datos del Cliente
     pdf.set_font("Arial", 'B', 10)
-    pdf.set_text_color(0, 0, 0)
-    pdf.cell(0, 7, f"Edad: {edad} anos | Peso ref: {p_ideal}kg | IMC: {imc} | Proteina: {proteina}g/dia", ln=True)
-    pdf.ln(3)
-    pdf.set_font("Arial", 'I', 8)
-    pdf.set_text_color(150, 0, 0)
+    pdf.set_fill_color(240, 240, 240)
+    pdf.set_tex_color(0, 0, 0)
+    pdf.cell(45, 10, "Referencia Peso", 1, 0, 'C', True)
+    pdf.cell(45, 10, "IMC Actual", 1, 0, 'C', True)
+
+    pdf.set_font("Arial", '', 11)
+    pdf.cell(45, 10, f"{p_ideal} kg", 1, 0, 'C')
+    pdf.cell(45, 10, f"{imc}", 1, 0, 'C')
+    pdf.cell(90, 10, f"{proteina} g / día", 1, 1, 'C')
+    pdf.ln(10)
+
+    # El Plan (AQUI ESTA EL CAMBIO IMPORTANTE)
+    pdf.set_font("Arial", 'B', 12)
+    pdf.set_fill_color(34, 139, 34)
+    pdf.set_text_color(255, 255, 255)
+    pdf.cell(0, 10, "DETALLE DEL PLAN PARA 5 DÍAS", 0, 1, 'L', True)
+
+    pdf.set_font("Arial", '', 10)
+    pdf.multi_cell(0, 7, texto)
     pdf.multi_cell(0, 5, "AVISO: Guia logistica de alimentos. No es prescripcion medica.")
-    pdf.ln(4)
+    pdf.ln(2)
     pdf.set_font("Arial", size=9)
     pdf.set_text_color(0, 0, 0)
     limpio = texto
@@ -89,7 +107,7 @@ if st.button("🚀 GENERAR MI PLAN DE BIOLOGÍSTICA", disabled=not acepto):
             client = Groq(api_key=API_KEY_MAESTRA)
 
             prompt = f"""
-Eres una experta en BioLogística nutricional y Gestión de Alimentos.
+actua como una experta en BioLogística nutricional y Gestión de Alimentos,Genera un plan basado UNICAMNETE con el inventario proporcionado
 CLIENTE: {nombre}. EDAD: {edad}. PESO: {peso}kg. IMC: {imc}.
 RITMO: {actividad}. META: {meta}. CUIDADO ESPECIAL: {salud}
 PROTEÍNA OBJETIVO: {proteina_diaria}g al día.
@@ -103,12 +121,12 @@ INSTRUCCIONES:
    - Al final de cada día suma EXACTAMENTE los gramos de proteína de cada comida.
    - REGLA IMPORTANTE: El Total Proteína diario = suma exacta de desayuno + almuerzo + cena. No inventes el total, calcula matemáticamente.
 3. Explica brevemente cómo preparar los alimentos de forma saludable.
-4. Lista de compras para la semana siguiente basada SOLO en las cantidades reales usadas en el menú. Si el menú usa 4 huevos en total, pide 4 huevos, no 60. Sé proporcional y lógica.
+4. Hacer la lista de compras para la semana siguiente basada en lo que necesita el cliente y descontar lo que ya se uso del inventario, poner  cantidades en unidades,gramos o litros reales que va a necesitar el cliente. Sé proporcional y lógica.
 
 REGLAS:
 - Solo comida natural, nada de polvos ni suplementos.
 - Sugiere alimentos específicos que ayuden con: {salud}.
-- Lista de compras en cantidades reales usadas en el menú.
+- Lista de compras en cantidades.
 - Sé amable y clara, sin lenguaje médico.
 """
 
