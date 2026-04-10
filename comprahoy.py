@@ -77,7 +77,7 @@ inventario = st.text_area("Escribe lo que TIENES hoy en casa:", placeholder="Ej:
 
 if st.button("🚀 GENERAR MI PLAN DE BIOLOGÍSTICA", disabled=not acepto):
     if not nombre or not inventario:
-        st.error("❌ Por favor completa tu nombre e inventario.")
+        st.error("❌ Por favor completa todos los campos requeridos.")
     else:
         try:
             client = Groq(api_key=API_KEY_MAESTRA)
