@@ -99,7 +99,7 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
             INVENTARIO ACTUAL: {inventario}.
 
             TAREAS:
-            1. TABLA DE MENÚ (Lunes a Viernes): Basada en su actividad {actividad}. Si falta algo, pon "(Falta compra)".
+            1. TABLA DE MENÚ (Lunes a Viernes): Basada en sus "condiciones medicas" y actividad {actividad}. Si falta algo, pon "(Falta compra)" .
             2. LISTA DE COMPRAS (PARA 7 DÍAS): Calcula los Kilos (kg) o Litros (L) necesarios restando el inventario.
             3. FORMATO: Sin barritas '|'. Texto limpio y profesional.
             """
