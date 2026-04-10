@@ -99,8 +99,9 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
             INVENTARIO ACTUAL: {inventario}.
 
             TAREAS:
-            1. TABLA DE MENÚ (Lunes a Viernes): Basada en sus "condiciones medicas" y actividad {actividad}. Si falta algo, pon "(Falta compra)" .
-            2. LISTA DE COMPRAS (PARA 7 DÍAS): Calcula los Kilos (kg) o Litros (L) necesarios restando el inventario.
+            1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida
+            2. TABLA DE MENÚ SEMANAL: Basada en sus "condiciones medicas" y actividad {actividad}. usar el inventario estrictamente.Si falta algo, pon "(Falta compra)" .
+            2. LISTA DE COMPRAS (PARA 7 DÍAS): Calcula los Kilos (kg) o Litros (L) necesarios, resta el inventario.
             3. FORMATO: Sin barritas '|'. Texto limpio y profesional.
             """
 
