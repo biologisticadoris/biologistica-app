@@ -100,9 +100,10 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
 
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida
-            2. TABLA DE MENÚ SEMANAL: Basada en sus "condiciones medicas" y actividad {actividad}. usar el inventario estrictamente.Si falta algo, pon "(Falta compra)" .
+            2. TABLA DE MENÚ SEMANAL: Basada en sus "condiciones medicas" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tieneds.Si falta algo, pon "(Falta compra)" .
             2. LISTA DE COMPRAS (PARA 7 DÍAS): Calcula los Kilos (kg) o Litros (L) necesarios, resta el inventario.
             3. FORMATO: Sin barritas '|'. Texto limpio y profesional.
+            4. si el inventario es insuficente para el requerimiento del cliente calculo hasta el dia que alcanza y sugerir la compra inmediata de alimentos
             """
 
             with st.spinner("⚖️ Calculando según actividad física y salud..."):
