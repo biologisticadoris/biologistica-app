@@ -97,7 +97,21 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
             CONDICIONES: {salud}.
             META: {proteina_diaria}g proteína diaria para {objetivo}.
             INVENTARIO ACTUAL: {inventario}.
-
+REGLAS DE SALUD Y CANTIDADES PERSONALIZADAS:
+- El menú es para UNA sola persona durante 5 días.
+- Calcula las porciones adecuadas considerando:
+  * Peso: {peso}kg
+  * Edad: {edad} años
+  * Actividad: {actividad}
+  * Objetivo: {objetivo}
+  * Condiciones médicas: {salud}
+- Para cada condición médica en {salud}, ajusta 
+  automáticamente los alimentos y cantidades según 
+  las recomendaciones nutricionales para esa condición.
+- La lista de compras debe reflejar exactamente 
+  las cantidades usadas en el menú para una persona.
+- Si un alimento está en el inventario disponible, 
+  no repetirlo en la lista de compras.
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida
             2. TABLA DE MENÚ SEMANAL: Basada en sus "condiciones medicas" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tieneds.Si falta algo, pon "(Falta compra)" .
@@ -112,8 +126,8 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
    - Sugiere alternativas económicas cuando sea posible
    - IMPORTANTE: Solo incluye lo que realmente se usó 
      en el menú, no inventes productos extra
-            4. FORMATO: Sin barritas '|'. Texto limpio y profesional.
-            5. si el inventario es insuficente para el requerimiento del cliente calculo hasta el dia que alcanza y sugerir la compra inmediata de alimentos
+        4. FORMATO: Sin barritas '|'. Texto limpio y profesional.
+        5. si el inventario es insuficente para el requerimiento del cliente calculo hasta el dia que alcanza y sugerir la compra inmediata de alimentos
             """
 
             with st.spinner("⚖️ Calculando según actividad física y salud..."):
