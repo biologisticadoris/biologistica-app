@@ -18,11 +18,11 @@ def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo, activi
     pdf.cell(0, 10, f"PLAN MAESTRO DE BIOLOGISTICA: {nombre.upper()}", ln=True, align='C')
     pdf.ln(5)
     
-    # Ficha del Paciente
+    # Ficha del cliente
     pdf.set_font("Arial", 'B', 10)
     pdf.set_text_color(0, 0, 0)
     pdf.set_fill_color(230, 240, 230)
-    resumen = f"Edad: {edad} | Actividad: {actividad} | IMC: {imc} | Meta: {proteina}g prot/dia"
+    resumen = f"Edad: {edad} | Actividad: {actividad} | IMC: {imc} | Meta: {proteina_diaria}g prot/dia"
     pdf.cell(0, 10, resumen.encode('latin-1', 'ignore').decode('latin-1'), ln=True, fill=True, border=1, align='C')
     pdf.ln(10)
     
