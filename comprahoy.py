@@ -105,7 +105,7 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
    - Basada EXACTAMENTE en las cantidades usadas en el menú
    - Adaptada a las condiciones médicas: {salud}
    - Considera que {nombre} tiene {edad} años, pesa {peso}kg
-     y su objetivo es {meta}
+     y su objetivo es {objetivo}
    - Organiza por categorías: Proteínas, Verduras, Frutas, 
      Lácteos, Otros
    - Indica cantidad exacta de cada alimento en kg o unidades
