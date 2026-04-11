@@ -31,7 +31,7 @@ def generar_pdf(texto, nombre, proteina, peso_ideal, imc, edad, objetivo, activi
     limpio = texto.replace('|', ' ').replace('*', '').encode('latin-1', 'ignore').decode('latin-1')
     pdf.multi_cell(0, 6, txt=limpio)
     
-    return pdf.output(dest='S').encode('latin-1')
+    return bytes(pdf.output())
 
 # --- INTERFAZ PRINCIPAL ---
 st.markdown("<h1 style='text-align: center; color: #2E7D32;'>🥗 BIOLOGÍSTICA DE PRECISIÓN</h1>", unsafe_allow_html=True)
@@ -101,9 +101,19 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida
             2. TABLA DE MENÚ SEMANAL: Basada en sus "condiciones medicas" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tieneds.Si falta algo, pon "(Falta compra)" .
-            2. LISTA DE COMPRAS (PARA 7 DÍAS): Calcula los Kilos (kg) o Litros (L) necesarios, resta el inventario.
-            3. FORMATO: Sin barritas '|'. Texto limpio y profesional.
-            4. si el inventario es insuficente para el requerimiento del cliente calculo hasta el dia que alcanza y sugerir la compra inmediata de alimentos
+            3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
+   - Basada EXACTAMENTE en las cantidades usadas en el menú
+   - Adaptada a las condiciones médicas: {salud}
+   - Considera que {nombre} tiene {edad} años, pesa {peso}kg
+     y su objetivo es {meta}
+   - Organiza por categorías: Proteínas, Verduras, Frutas, 
+     Lácteos, Otros
+   - Indica cantidad exacta de cada alimento en kg o unidades
+   - Sugiere alternativas económicas cuando sea posible
+   - IMPORTANTE: Solo incluye lo que realmente se usó 
+     en el menú, no inventes productos extra
+            4. FORMATO: Sin barritas '|'. Texto limpio y profesional.
+            5. si el inventario es insuficente para el requerimiento del cliente calculo hasta el dia que alcanza y sugerir la compra inmediata de alimentos
             """
 
             with st.spinner("⚖️ Calculando según actividad física y salud..."):
