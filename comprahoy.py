@@ -108,10 +108,9 @@ if st.button("🚀 GENERAR PLAN DE COMIDAS SEMANAL Y COMPRAS", disabled=not acep
             META: {proteina_diaria}g proteína diaria para {objetivo}.
             INVENTARIO ACTUAL: {inventario}.
 REGLAS DE COCINA PERSONALIZADAS:
-- En la preparacion de la comida USA SOLO los alimentos del inventario disponible.
+- En la preparacion de la comida USA exclusivamente los alimentos del inventario disponible.
 - El menú es para UNA persona durante 5 días.
-- Los snacks deben ser apetecibles: fruta, yogurt, 
-  nueces. Nunca verduras crudas solas como snack.
+- Los snacks deben ser apetecibles:  Nunca verduras crudas solas como snack.
 -- Calcula las porciones según el perfil de {nombre}: 
   {peso}kg, {edad} años, actividad {actividad}, 
   objetivo {objetivo}.
@@ -119,7 +118,7 @@ REGLAS DE COCINA PERSONALIZADAS:
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida, poniendo la cantidad de proteina en cada comida y en cada dia
             2. TABLA DE MENÚ SEMANAL: Basada en el inventario, sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente.
-            -poner la cantidad del alimento a usar y la cantidad de gramos de proteina en cada comida, calculo matematico exacto y el total de proteinas de cada plato.
+            -poner la cantidad del alimento crudo  a usar y la cantidad de gramos de proteina en cada comida, calculo matematico exacto y el total de proteinas de cada plato.
             3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
     -Hacer la lista de compras personalizada de los alimentos que  necesita el cliente para la semana siguiente restando el inventario y poniendo el saldo para comprar. Adaptada a las prefencias alimentarias: {salud}
    - Considera que {nombre} tiene {edad} años, pesa {peso}kg  y su objetivo es {objetivo}
