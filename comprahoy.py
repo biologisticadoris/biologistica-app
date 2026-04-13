@@ -91,11 +91,11 @@ if st.button("🚀 GENERAR PLAN DE COMIDAS SEMANAL Y COMPRAS", disabled=not acep
             client = Groq(api_key=API_KEY_MAESTRA)
             
             prompt = f"""
-            Actúa como Nutricionista y Experta en Logística y gastronomia peruana.
+            Actúa como Nutricionista Experta en  gastronomia peruana y logistica.
             CLIENTE: {nombre}, {edad} años, {genero}.
             NIVEL DE ACTIVIDAD: {actividad}.
             PREFERENCIAS ALIMENTARIAS DEL CLIENTE: {salud}.
-            Adapta el menú respetando las preferencias de {nombre}:
+            Adapta el menú respetando el inventario y las preferencias de {nombre}:
 - Bajo en azúcar: evita dulces, harinas blancas, 
   frutas muy dulces. Prioriza alimentos de bajo 
   índice glucémico.
@@ -117,15 +117,13 @@ REGLAS DE COCINA PERSONALIZADAS:
 - Calcula las porciones según el perfil de {nombre}: 
   {peso}kg, {edad} años, actividad {actividad}, 
   objetivo {objetivo}.
--- La lista de compras debe reflejar exactamente 
-  las cantidades usadas en el menú para una persona.
+-- La lista de compras debe reflejar lo que se necesita la semana siguiente.
 - Si un alimento está en el inventario disponible, 
   no repetirlo en la lista de compras.
             TAREAS:
-            1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida y en cada dia
-            2. TABLA DE MENÚ SEMANAL: Basada en sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tienes.Si falta algo, pon "(Falta compra)" .
+            1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de proteina en cada comida y en cada dia
+            2. TABLA DE MENÚ SEMANAL: Basada en el inventario, sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tienes.Si falta algo, pon "(Falta compra)" .
             3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
-   - Basada EXACTAMENTE en las cantidades usadas en el menú
    - Adaptada a las prefencias alimentarias: {salud}
    - Considera que {nombre} tiene {edad} años, pesa {peso}kg
      y su objetivo es {objetivo}
@@ -133,8 +131,7 @@ REGLAS DE COCINA PERSONALIZADAS:
      Lácteos, Otros
    - Indica cantidad exacta de cada alimento en kg o unidades
    - Sugiere alternativas económicas cuando sea posible
-   - IMPORTANTE: Solo incluye lo que realmente se usó 
-     en el menú, no inventes productos extra
+   - IMPORTANTE: las comidas deben ser de recetas de comidad peruana
         4. FORMATO: Sin barritas '|'. Texto limpio y profesional.
         5. si el inventario es insuficente para el requerimiento del cliente calculo hasta el dia que alcanza y sugerir la compra inmediata de alimentos
             """
