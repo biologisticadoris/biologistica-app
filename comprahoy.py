@@ -66,7 +66,7 @@ with st.sidebar:
     )
     
     objetivo = st.radio("Objetivo:", ["Mantener", "Ganar Músculo", "Perder Grasa"])
-    salud = st.multiselect("Condiciones médicas:", ["Hígado Graso", "Colesterol", "Diabetes", "Hipertensión"], default=["Hígado Graso", "Colesterol"])
+    salud = st.multiselect("Cuidado especial:", ["Suave para el higado", "Bajo en grasas", "Bajo en azucar", "Bajo en sodio"], default=["Suave para el higado", "Bajo en grasas"])
 
 # Cálculos de Nutrición Ajustados
 talla_m = talla_cm / 100
@@ -83,7 +83,7 @@ st.write("---")
 st.subheader("📦 Inventario de Despensa")
 inventario = st.text_area("Escribe detalladamente qué tienes (Ej: 3 huevos, 100g de queso...)", height=100)
 
-if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
+if st.button("🚀 GENERAR PLAN DE COMIDAS SEMANAL Y COMPRAS", disabled=not acepto):
     if not inventario:
         st.error("❌ Por favor, ingresa tu inventario.")
     else:
@@ -94,30 +94,39 @@ if st.button("🚀 GENERAR PLAN NUTRICIONAL Y COMPRAS", disabled=not acepto):
             Actúa como Nutricionista y Experta en Logística.
             CLIENTE: {nombre}, {edad} años, {genero}.
             NIVEL DE ACTIVIDAD: {actividad}.
-            CONDICIONES: {salud}.
+            PREFERENCIAS ALIMENTARIAS DEL CLIENTE: {salud}.
+            Adapta el menú respetando las preferencias de {nombre}:
+- Bajo en azúcar: evita dulces, harinas blancas, 
+  frutas muy dulces. Prioriza alimentos de bajo 
+  índice glucémico.
+- Bajo en grasas: limita quesos curados a 20-30g 
+  como condimento, evita fritos y grasas saturadas.
+- Suave para el hígado: prioriza proteínas magras, 
+  verduras frescas, evita alcohol y ultraprocesados.
+- Bajo en sodio: evita sal en exceso, embutidos 
+  y enlatados.
             META: {proteina_diaria}g proteína diaria para {objetivo}.
             INVENTARIO ACTUAL: {inventario}.
-REGLAS DE SALUD Y CANTIDADES PERSONALIZADAS:
-- El menú es para UNA sola persona durante 5 días.
-- Calcula las porciones adecuadas considerando:
-  * Peso: {peso}kg
-  * Edad: {edad} años
-  * Actividad: {actividad}
-  * Objetivo: {objetivo}
-  * Condiciones médicas: {salud}
-- Para cada condición médica en {salud}, ajusta 
-  automáticamente los alimentos y cantidades según 
-  las recomendaciones nutricionales para esa condición.
-- La lista de compras debe reflejar exactamente 
+REGLAS DE COCINA PERSONALIZADAS:
+- USA SOLO los alimentos del inventario disponible.
+- El menú es para UNA persona durante 5 días.
+- Los snacks deben ser apetecibles: fruta, yogurt, 
+  nueces. Nunca verduras crudas solas como snack.
+- La lista de compras debe ser proporcional y lógica 
+  para una sola persona.
+- Calcula las porciones según el perfil de {nombre}: 
+  {peso}kg, {edad} años, actividad {actividad}, 
+  objetivo {objetivo}.
+-- La lista de compras debe reflejar exactamente 
   las cantidades usadas en el menú para una persona.
 - Si un alimento está en el inventario disponible, 
   no repetirlo en la lista de compras.
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida
-            2. TABLA DE MENÚ SEMANAL: Basada en sus "condiciones medicas" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tieneds.Si falta algo, pon "(Falta compra)" .
+            2. TABLA DE MENÚ SEMANAL: Basada en sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tieneds.Si falta algo, pon "(Falta compra)" .
             3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
    - Basada EXACTAMENTE en las cantidades usadas en el menú
-   - Adaptada a las condiciones médicas: {salud}
+   - Adaptada a las prefencias alimentarias: {salud}
    - Considera que {nombre} tiene {edad} años, pesa {peso}kg
      y su objetivo es {objetivo}
    - Organiza por categorías: Proteínas, Verduras, Frutas, 
