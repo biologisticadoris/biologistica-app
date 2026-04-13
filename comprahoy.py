@@ -91,7 +91,7 @@ if st.button("🚀 GENERAR PLAN DE COMIDAS SEMANAL Y COMPRAS", disabled=not acep
             client = Groq(api_key=API_KEY_MAESTRA)
             
             prompt = f"""
-            Actúa como Nutricionista y Experta en Logística.
+            Actúa como Nutricionista y Experta en Logística y gastronomia peruana.
             CLIENTE: {nombre}, {edad} años, {genero}.
             NIVEL DE ACTIVIDAD: {actividad}.
             PREFERENCIAS ALIMENTARIAS DEL CLIENTE: {salud}.
@@ -122,8 +122,8 @@ REGLAS DE COCINA PERSONALIZADAS:
 - Si un alimento está en el inventario disponible, 
   no repetirlo en la lista de compras.
             TAREAS:
-            1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida
-            2. TABLA DE MENÚ SEMANAL: Basada en sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tieneds.Si falta algo, pon "(Falta compra)" .
+            1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida poniendo la cantidad de pproteina en cada comida y en cada dia
+            2. TABLA DE MENÚ SEMANAL: Basada en sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente. no puedes usar lo que no tienes.Si falta algo, pon "(Falta compra)" .
             3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
    - Basada EXACTAMENTE en las cantidades usadas en el menú
    - Adaptada a las prefencias alimentarias: {salud}
