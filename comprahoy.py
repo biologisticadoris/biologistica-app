@@ -124,7 +124,7 @@ REGLAS DE COCINA PERSONALIZADAS:
    - Considera que {nombre} tiene {edad} años, pesa {peso}kg  y su objetivo es {objetivo}
    - Organiza por categorías: Proteínas, Verduras, Frutas, 
      Lácteos, sugerir alimentos naturales, pero nunca polvos de proteina ni otros quimicos
-   - Indica cantidad exacta de cada alimento en kg o unidades
+   - Indica cantidad exacta de cada alimento en kg, litros o unidades, nunca en paquetes o cabezas
    - Sugiere alternativas económicas cuando sea posible
    - IMPORTANTE: las comidas deben ser de recetas de comidad peruana
         4. FORMATO: Sin barritas '|'. Texto limpio y profesional.
