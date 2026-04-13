@@ -108,26 +108,21 @@ if st.button("🚀 GENERAR PLAN DE COMIDAS SEMANAL Y COMPRAS", disabled=not acep
             META: {proteina_diaria}g proteína diaria para {objetivo}.
             INVENTARIO ACTUAL: {inventario}.
 REGLAS DE COCINA PERSONALIZADAS:
-- USA SOLO los alimentos del inventario disponible.
+- En la preparacion de la comida USA SOLO los alimentos del inventario disponible.
 - El menú es para UNA persona durante 5 días.
 - Los snacks deben ser apetecibles: fruta, yogurt, 
   nueces. Nunca verduras crudas solas como snack.
-- La lista de compras debe ser proporcional y lógica 
-  para una sola persona.
-- Calcula las porciones según el perfil de {nombre}: 
+-- Calcula las porciones según el perfil de {nombre}: 
   {peso}kg, {edad} años, actividad {actividad}, 
   objetivo {objetivo}.
 -- La lista de compras debe reflejar lo que se necesita la semana siguiente restando el inventario.
-- Si un alimento está en el inventario disponible, 
-  no repetirlo en la lista de compras.
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida, poniendo la cantidad de proteina en cada comida y en cada dia
-            2. TABLA DE MENÚ SEMANAL: Basada en el inventario, sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente.Si falta algo, pon "(Falta compra)"de poner la cantidad de alimento y la cantidad de gramos de proteina en cada comida y el total de proteinas de cada plato.
+            2. TABLA DE MENÚ SEMANAL: Basada en el inventario, sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente.
+            -poner la cantidad del alimento a usar y la cantidad de gramos de proteina en cada comida y el total de proteinas de cada plato.
             3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
-    -Hacer la lista de compras personalizada de los alimentos que  necesita el cliente para la semana siguiente restando el inventario.
-   - Adaptada a las prefencias alimentarias: {salud}
-   - Considera que {nombre} tiene {edad} años, pesa {peso}kg
-     y su objetivo es {objetivo}
+    -Hacer la lista de compras personalizada de los alimentos que  necesita el cliente para la semana siguiente restando el inventario. Adaptada a las prefencias alimentarias: {salud}
+   - Considera que {nombre} tiene {edad} años, pesa {peso}kg  y su objetivo es {objetivo}
    - Organiza por categorías: Proteínas, Verduras, Frutas, 
      Lácteos, Otros
    - Indica cantidad exacta de cada alimento en kg o unidades
