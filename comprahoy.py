@@ -117,10 +117,10 @@ REGLAS DE COCINA PERSONALIZADAS:
 -- La lista de compras debe reflejar lo que se necesita la semana siguiente restando el inventario.
             TAREAS:
             1. HACER EL CALCULO DE PROTEINAS que necesita el cliente por dia y distribuirlo en cada comida, poniendo la cantidad de proteina en cada comida y en cada dia
-            2. TABLA DE MENÚ SEMANAL: Basada en el inventario, sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente.
+            2. TABLA DE MENÚ SEMANAL: Basada en el inventario, sus "prefencias alimentarias" y actividad {actividad}. usar el inventario estrictamente. poner comidas variadas cada dia
             -poner la cantidad del alimento crudo  a usar y la cantidad de gramos de proteina en cada comida, calculo matematico exacto y el total de proteinas de cada plato.
             3. LISTA DE COMPRAS PERSONALIZADA para la semana siguiente:
-    -Hacer la lista de compras personalizada de los alimentos que  necesita el cliente para la semana siguiente restando el inventario y poniendo el saldo para comprar, calculo matematico exacto. Adaptada a las prefencias alimentarias: {salud}
+    -Hacer la lista de compras personalizada de los alimentos que  necesita el cliente para la semana siguiente restando el inventario y poniendo el saldo para comprar, calculo matematico exacto. la lista debe ser variada cada semana, Adaptada a las prefencias alimentarias: {salud}
    - Considera que {nombre} tiene {edad} años, pesa {peso}kg  y su objetivo es {objetivo}
    - Organiza por categorías: Proteínas, Verduras, Frutas, 
      Lácteos, sugerir alimentos naturales, pero nunca polvos de proteina ni otros quimicos
